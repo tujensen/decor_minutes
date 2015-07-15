@@ -1,0 +1,19 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "tujensen@gmail.com",
+    "longName": "Decor Minutes",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "Decor Minutes",
+    "uuid": "1ba82dfb-19a1-4bd0-832d-78eaf08ea765",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
