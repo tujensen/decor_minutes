@@ -3,17 +3,26 @@
     "capabilities": [
         ""
     ],
-    "companyName": "tujensen@gmail.com",
+    "companyName": "Troels Ugilt Jensen",
     "longName": "Decor Minutes",
     "projectType": "native",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "file": "fonts/Roboticon_Numbers5.ttf",
+                "name": "FONT_ROBOTICON_80",
+                "type": "font"
+            }
+        ]
     },
     "sdkVersion": "3",
     "shortName": "Decor Minutes",
+    "targetPlatforms": [
+        "basalt"
+    ],
     "uuid": "1ba82dfb-19a1-4bd0-832d-78eaf08ea765",
     "versionLabel": "1.0",
     "watchapp": {
-        "watchface": false
+        "watchface": true
     }
 }
