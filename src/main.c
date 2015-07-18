@@ -86,7 +86,7 @@ int battery_level;
 
 static void draw_triangle(GPath *triangle, GContext *ctx, GColor8 color) {
   graphics_context_set_antialiased(ctx, false);
-  graphics_context_set_stroke_width(ctx, 8);
+  graphics_context_set_stroke_width(ctx, 3);
   
   graphics_context_set_fill_color(ctx, color);
   gpath_draw_filled(ctx, triangle);
