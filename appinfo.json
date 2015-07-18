@@ -9,8 +9,9 @@
     "resources": {
         "media": [
             {
-                "file": "fonts/Roboticon_Numbers5.ttf",
-                "name": "FONT_ROBOTICON_80",
+                "file": "fonts/Roboticon_Numbers.ttf",
+                "name": "FONT_ROBOTICON_30",
+                "trackingAdjust": 5,
                 "type": "font"
             }
         ]

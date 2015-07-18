@@ -1,5 +1,5 @@
 /**
-  Decor Watchface
+  Decor Minutes
   written by Troels Ugilt Jensen.
   http://tuj.dk
 */
@@ -10,9 +10,7 @@
   
 static Window *s_main_window;
 static TextLayer *s_time_layer;
-static TextLayer *s_time_layer_back;
-static TextLayer *s_second_layer;
-static TextLayer *s_second_layer_back;
+static TextLayer *s_info_layer;
 static GFont s_time_font;
 static Layer *s_canvas;
 static TextLayer *s_battery_layer;
@@ -125,13 +123,8 @@ static void update_time(int force) {
 
   // Create a long-lived buffer
   static char sbuffer[] = "00";
-
   strftime(sbuffer, sizeof("00"), "%S", tick_time);
     
-  // Display this time on the TextLayer
-  text_layer_set_text(s_second_layer, sbuffer);
-  text_layer_set_text(s_second_layer_back, sbuffer);
-  
   // Get seconds as int
   int result = atoi(sbuffer);
   
@@ -151,14 +144,21 @@ static void update_time(int force) {
       // Use 12 hour format
       strftime(buffer, sizeof("00:00"), "%I:%M", tick_time);
     }
-    
+
+    // Update date text.
+    static char dbuffer[] = "  ";
+    strftime(dbuffer, 80, "%a. %d. %b. %Y", tick_time);
+    text_layer_set_text(s_info_layer, dbuffer);
+
     // Set the minute texts.
     text_layer_set_text(s_time_layer, buffer);
-    text_layer_set_text(s_time_layer_back, buffer);
 
     // Get new color theme.
     selected_color = rand() % MAX_COLORS;
     window_set_background_color(s_main_window, GColorFromHEX(background_colors[selected_color]));
+  }
+  else {
+    layer_mark_dirty(s_canvas);
   }
 }
 
@@ -185,40 +185,29 @@ static void main_window_load(Window *window) {
   s_canvas = layer_create(GRect(0, 0, 144, 168));
   
   // Create watch texts.
-  s_time_layer = text_layer_create(GRect(2, 30, 144, 50));
-  s_time_layer_back = text_layer_create(GRect(3, 31, 144, 50));
-  s_second_layer = text_layer_create(GRect(2, 88, 144, 50));
-  s_second_layer_back = text_layer_create(GRect(3, 89, 144, 50));
+  s_time_layer = text_layer_create(GRect(10, 15, 124, 34));
+  s_info_layer = text_layer_create(GRect(10, 129, 124, 24));
   
   // Setup watch text colors.
-  text_layer_set_text_color(s_time_layer, GColorBlack);
-  text_layer_set_text_color(s_time_layer_back, GColorWhite);
-  text_layer_set_text_color(s_second_layer, GColorBlack);
-  text_layer_set_text_color(s_second_layer_back, GColorWhite);
-  text_layer_set_background_color(s_time_layer, GColorClear);
-  text_layer_set_background_color(s_time_layer_back, GColorClear);
-  text_layer_set_background_color(s_second_layer, GColorClear);
-  text_layer_set_background_color(s_second_layer_back, GColorClear);
+  text_layer_set_text_color(s_time_layer, GColorWhite);
+  text_layer_set_background_color(s_time_layer, GColorBlack);
+  text_layer_set_text_color(s_info_layer, GColorWhite);
+  text_layer_set_background_color(s_info_layer, GColorBlack);
   
   // Setup font for watch.
-  s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTICON_80));
+  s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTICON_30));
   text_layer_set_font(s_time_layer, s_time_font);
-  text_layer_set_font(s_time_layer_back, s_time_font);
-  text_layer_set_font(s_second_layer, s_time_font);
-  text_layer_set_font(s_second_layer_back, s_time_font);
+
+  text_layer_set_font(s_info_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
   
   // Set text alignments.
-  text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
-  text_layer_set_text_alignment(s_time_layer_back, GTextAlignmentCenter);
-  text_layer_set_text_alignment(s_second_layer, GTextAlignmentCenter);
-  text_layer_set_text_alignment(s_second_layer_back, GTextAlignmentCenter);
-
+  text_layer_set_text_alignment(s_time_layer, GTextAlignmentRight);
+  text_layer_set_text_alignment(s_info_layer, GTextAlignmentCenter);
+  
   // Add it as a child layer to the Window's root layer
   layer_add_child(window_get_root_layer(window), s_canvas);
-  layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_time_layer_back));
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_time_layer));
-  layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_second_layer_back));
-  layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_second_layer));
+  layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_info_layer));
 
   // Get the current battery level
   battery_handler(battery_state_service_peek());
@@ -229,9 +218,7 @@ static void main_window_unload(Window *window) {
   
   // Destroy TextLayer
   text_layer_destroy(s_time_layer);
-  text_layer_destroy(s_time_layer_back);
-  text_layer_destroy(s_second_layer);
-  text_layer_destroy(s_second_layer_back);
+  text_layer_destroy(s_info_layer);
   
   for (i = 0; i < 8; i++) {
     gpath_destroy(triangles[i]);
