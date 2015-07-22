@@ -10,8 +10,7 @@
         "media": [
             {
                 "file": "fonts/Roboticon_Numbers.ttf",
-                "name": "FONT_ROBOTICON_30",
-                "trackingAdjust": 5,
+                "name": "FONT_ROBOTICON_42",
                 "type": "font"
             }
         ]
