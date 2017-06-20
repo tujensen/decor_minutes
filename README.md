@@ -1,4 +1,4 @@
-# decor_minutes
+# decor minutes watchface
 
 A pebble time watchface.
 
